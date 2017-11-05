@@ -16,7 +16,7 @@ class Board
     @bomb_pos = rand_bomb_pos(num_bombs)
         
     (0...@grid.size).each do |row|
-      (0...@grid.size).each do |col|
+      (0...@grid[0].size).each do |col|
         @grid[row][col] = Tile.new @bomb_pos.include?([row,col])
       end
     end
@@ -25,6 +25,13 @@ class Board
   
   def toggle_flag pos
     self[pos].toggle_flag
+  end
+  
+  def render
+    puts "  #{(0...@grid.size).to_a.join(" ")}"
+    @grid.transpose.each_with_index do |row, idx|
+      puts "#{idx} #{row.join(" ")}"
+    end
   end
   
   def [] pos
