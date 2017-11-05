@@ -23,6 +23,10 @@ class Board
     self
   end
   
+  def toggle_flag pos
+    self[pos].toggle_flag
+  end
+  
   def [] pos
     x,y = pos
     @grid[x][y]
