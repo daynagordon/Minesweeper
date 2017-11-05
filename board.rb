@@ -9,14 +9,15 @@ class Board
   
   def initialize width = 4, length = 3
     @grid = Board.empty_grid( width, length )
+    @bomb_pos = []
   end
   
   def populate num_bombs = 5
-    bomb_pos = rand_bomb_pos(num_bombs)
+    @bomb_pos = rand_bomb_pos(num_bombs)
         
     (0...@grid.size).each do |row|
       (0...@grid.size).each do |col|
-        @grid[row][col] = Tile.new bomb_pos.include?([row,col])
+        @grid[row][col] = Tile.new @bomb_pos.include?([row,col])
       end
     end
     self
