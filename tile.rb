@@ -14,6 +14,7 @@ class Tile
       @value = (@is_a_bomb ? "B".colorize(:red) : adjacent_value)
       @is_revealed = true
     end
+    @is_revealed
   end
   
   def toggle_flag
