@@ -7,7 +7,7 @@ class Board
     Array.new(width){Array.new(length)}
   end
   
-  def initialize width = 4, length = 3
+  def initialize width = 4, length = 4
     @grid = Board.empty_grid( width, length )
     @bomb_pos = []
   end
@@ -32,6 +32,23 @@ class Board
     @grid.transpose.each_with_index do |row, idx|
       puts "#{idx} #{row.join(" ")}"
     end
+  end
+
+  def adjacent_pos pos
+    x, y =  pos
+    adjacents = []
+    (x-1..x+1).each do |row|
+      next if row < 0 || row >= @grid.size
+      
+      (y-1..y+1).each do |col|
+        next if col < 0 || col >= @grid.size
+        
+        next if pos == [row, col]
+        
+        adjacents << [row, col]
+      end
+    end
+    adjacents
   end
   
   def [] pos
