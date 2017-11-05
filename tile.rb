@@ -9,12 +9,18 @@ class Tile
   end
   
   
-  def reveal adjacent_value = "_"
+  def reveal
     unless self.flagged?
-      @value = (@is_a_bomb ? "B".colorize(:red) : adjacent_value)
+      @value = (@is_a_bomb ? "B".colorize(:red) : "_")
       @is_revealed = true
     end
     @is_revealed
+  end
+  
+  def set_value val
+    unless self.bomb? || self.flagged?
+      @value = val if self.revealed? && val.is_a?(Integer)
+    end
   end
   
   def toggle_flag
