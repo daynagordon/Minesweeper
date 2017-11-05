@@ -3,8 +3,8 @@ require "byebug"
 
 class Board
   
-  def self.empty_grid width, length = nil
-    Array.new(width){Array.new(length ||= width)}
+  def self.empty_grid width, length
+    Array.new(width){Array.new(length)}
   end
   
   def initialize width = 4, length = 3
