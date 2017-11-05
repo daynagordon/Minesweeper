@@ -1,9 +1,6 @@
 require 'colorize'
 
-class Tile
-  
-  attr_reader :is_a_bomb
-  
+class Tile  
   def initialize bomb = false
     @is_a_bomb = bomb
     @is_revealed = false
@@ -33,6 +30,10 @@ class Tile
   
   def revealed?
     @is_revealed
+  end
+  
+  def bomb?
+    @is_a_bomb
   end
   
   def to_s
