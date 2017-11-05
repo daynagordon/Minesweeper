@@ -28,10 +28,11 @@ class Board
   end
   
   def render
-    puts "  #{(0...@grid.size).to_a.join(" ")}"
+    render_string = ["  #{(0...@grid.size).to_a.join(" ")}"]
     @grid.transpose.each_with_index do |row, idx|
-      puts "#{idx} #{row.join(" ")}"
+      render_string << "#{idx} #{row.join(" ")}"
     end
+    puts render_string.join("\n")
   end
 
   def adjacent_pos pos
@@ -49,6 +50,30 @@ class Board
       end
     end
     adjacents
+  end
+  
+  def reveal_adjacents adjacents
+    adjacents.each do |current|
+      next if @bomb_pos.include?( current ) || self[current].revealed?
+      
+      self.reveal( current )
+    end
+    nil
+  end
+  
+  def reveal pos
+    unless self[pos].flagged? || self[pos].bomb?
+      adjacents = adjacent_pos( pos )
+      bomb_count = (@bomb_pos & adjacents).size
+      
+      self[pos].reveal
+      
+      if bomb_count == 0
+        reveal_adjacents adjacents
+      else
+        self[pos].set_value bomb_count
+      end
+    end
   end
   
   def [] pos
