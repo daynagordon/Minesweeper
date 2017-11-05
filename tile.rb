@@ -40,6 +40,6 @@ class Tile
   end
   
   def inspect
-    "value: #{@value}\nbomb?: #{self.is_a_bomb}"
+    "#{(@is_a_bomb ? "B" : @value)}"
   end
 end

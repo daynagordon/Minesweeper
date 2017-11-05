@@ -1,14 +1,25 @@
+require_relative "tile"
+require "byebug"
+
 class Board
   
   def self.empty_grid width, length = nil
-    Array.new(width){Array.new(length | width)}
+    Array.new(width){Array.new(length ||= width)}
   end
   
-  def initialize width = 5, length = 5
-    @grid = grid
+  def initialize width = 4, length = 3
+    @grid = Board.empty_grid( width, length )
   end
   
   def populate num_bombs = 5
+    bomb_pos = rand_bomb_pos(num_bombs)
+        
+    (0...@grid.size).each do |row|
+      (0...@grid.size).each do |col|
+        @grid[row][col] = Tile.new bomb_pos.include?([row,col])
+      end
+    end
+    self
   end
   
   def [] pos
@@ -21,5 +32,14 @@ class Board
     @grid[x][y] = val
   end
   
+  private
   
+  def rand_bomb_pos num_bombs = 5
+    bombs = []
+    until bombs.size == num_bombs do 
+      pos = [rand(0...@grid.size), rand(0..@grid[0].size)]
+      bombs << pos unless bombs.include?(pos)
+    end
+    bombs
+  end
 end
