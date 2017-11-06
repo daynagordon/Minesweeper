@@ -2,14 +2,17 @@ require_relative 'board'
 
 class Game
   
-  def initialize width = 4, length = 4
-    @board = Board.new(width, length)
-    @width = width
-    @length = length
+  def initialize options = {}
+    defaults = {
+      num_of_bombs: 5,
+      width: 4,
+      length: 4
+    }
+    options = defaults.merge(options)
+    @board = Board.new(options)
   end
   
   def run
-    @board.populate
     over = @board.over?
     
     until over
@@ -23,10 +26,10 @@ class Game
       when 'F', 'f'
         @board.toggle_flag( pos )
         over = @board.over?
-      when 'q'
+      when 'q', 'Q'
         over = self.quit
-      # when
-        # over = self.save
+      when 's', 'S'
+        over = self.save
       end
       system "clear"
     end
@@ -42,9 +45,21 @@ class Game
   end
   
   def quit
-    print "Are you sure? > "
+    print "Would you like to save your game? > "
     input = gets.chomp
-    return input[0] == 'y'
+    return true unless input[0] == 'y'
+    
+    self.save
+  end
+  
+  def save
+    print "Please enter a filename > "
+    filename = gets.chomp
+    
+    file = File.open(filename, "w")
+    file.puts self.to_yaml
+    file.close
+    true
   end
   
   def get_input
@@ -81,7 +96,8 @@ class Game
   
   def valid_pos? pos
     x, y = pos
-    (0...@width).cover?(x) && (0...@length).cover?(y) 
+    x_max, y_max = @board.size
+    (0...x_max).cover?(x) && (0...y_max).cover?(y) 
   end
   
   def over?
