@@ -10,6 +10,7 @@ class Board
   def initialize width = 4, length = 4
     @grid = Board.empty_grid( width, length )
     @bomb_pos = []
+    self.populate
   end
   
   def populate num_bombs = 5
