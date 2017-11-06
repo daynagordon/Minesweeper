@@ -1,4 +1,5 @@
 require 'colorize'
+require 'yaml'
 
 class Tile  
   def initialize options = {}
@@ -34,7 +35,7 @@ class Tile
   def toggle_flag
     unless @is_revealed
       @is_flagged = !@is_flagged
-      @value = "F".colorize(:blue) if @is_flagged
+      @value = @is_flagged ? "F".colorize(:blue) : "*"
     end
     @is_flagged
   end
