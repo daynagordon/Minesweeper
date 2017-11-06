@@ -62,7 +62,9 @@ class Board
   end
   
   def reveal pos
-    unless self[pos].flagged? || self[pos].bomb?
+    if self[pos].bomb?
+      self[pos].reveal
+    elsif !self[pos].flagged?
       adjacents = adjacent_pos( pos )
       bomb_count = (@bomb_pos & adjacents).size
       
@@ -74,6 +76,22 @@ class Board
         self[pos].set_value bomb_count
       end
     end
+  end
+  
+  def over?
+    self.lost? || self.won?
+  end
+  
+  def won?
+    @grid.all? do |row|
+      row.all? do |tile|
+        (tile.bomb? && !tile.revealed?) || tile.revealed?
+      end
+    end
+  end
+  
+  def lost?
+    @bomb_pos.any?{ |pos| self[pos].revealed? }
   end
   
   def [] pos
@@ -91,7 +109,7 @@ class Board
   def rand_bomb_pos num_bombs = 5
     bombs = []
     until bombs.size == num_bombs do 
-      pos = [rand(0...@grid.size), rand(0..@grid[0].size)]
+      pos = [rand(0...@grid.size), rand(0...@grid[0].size)]
       bombs << pos unless bombs.include?(pos)
     end
     bombs
