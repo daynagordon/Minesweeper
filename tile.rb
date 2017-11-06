@@ -1,13 +1,20 @@
 require 'colorize'
 
 class Tile  
-  def initialize bomb = false
-    @is_a_bomb = bomb
-    @is_revealed = false
-    @is_flagged = false
-    @value = "*"
+  def initialize options = {}
+    defaults = {
+      bomb: false,
+      revealed: false,
+      flagged: false,
+      value: '*'
+    }
+    options = defaults.merge(options)
+    
+    @is_a_bomb = options[:bomb]
+    @is_revealed = options[:revealed]
+    @is_flagged = options[:flagged]
+    @value = options[:value]
   end
-  
   
   def reveal
     unless self.flagged?
@@ -21,6 +28,7 @@ class Tile
     unless self.bomb? || self.flagged?
       @value = val if self.revealed? && val.is_a?(Integer)
     end
+    @value
   end
   
   def toggle_flag
@@ -48,6 +56,10 @@ class Tile
   end
   
   def inspect
-    "#{(@is_a_bomb ? "B" : @value)}"
+    {
+      bomb: @is_a_bomb,
+      revealed: @is_revealed,
+      flagged: @is_flagged   
+    }.to_s
   end
-end
+end 
