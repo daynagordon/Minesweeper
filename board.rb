@@ -18,10 +18,9 @@ class Board
         
     (0...@grid.size).each do |row|
       (0...@grid[0].size).each do |col|
-        @grid[row][col] = Tile.new @bomb_pos.include?([row,col])
+        @grid[row][col] = Tile.new( {bomb: @bomb_pos.include?([row,col])} )
       end
     end
-    self
   end
   
   def toggle_flag pos
