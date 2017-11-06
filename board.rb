@@ -1,5 +1,4 @@
 require_relative "tile"
-require "byebug"
 
 class Board
   
@@ -7,13 +6,17 @@ class Board
     Array.new(width){Array.new(length)}
   end
   
-  def initialize width = 4, length = 4
+  def initialize num_bombs = 5, width = 4, length = 4
     @grid = Board.empty_grid( width, length )
     @bomb_pos = []
-    self.populate
+    self.populate num_bombs
   end
   
-  def populate num_bombs = 5
+  def size
+    [@grid.size, @grid[0].size]
+  end
+  
+  def populate num_bombs
     @bomb_pos = rand_bomb_pos(num_bombs)
         
     (0...@grid.size).each do |row|
