@@ -6,10 +6,16 @@ class Board
     Array.new(width){Array.new(length)}
   end
   
-  def initialize num_bombs = 5, width = 4, length = 4
-    @grid = Board.empty_grid( width, length )
+  def initialize options = {}
+    defaults = {
+      num_of_bombs: 5,
+      width: 4,
+      length: 4
+    }
+    options = defaults.merge(options)
+    @grid = Board.empty_grid( options[:width], options[:length] )
     @bomb_pos = []
-    self.populate num_bombs
+    self.populate options[:num_bombs]
   end
   
   def size
