@@ -10,30 +10,47 @@ class Game
   
   def run
     @board.populate
+    over = @board.over?
     
-    until @board.over?
+    until over
       @board.render
       
       option, pos = self.get_input
       case option
       when 'r', 'R'
         @board.reveal( pos )
+        over = @board.over?
       when 'F', 'f'
         @board.toggle_flag( pos )
+        over = @board.over?
+      when 'q'
+        over = self.quit
+      # when
+        # over = self.save
       end
+      system "clear"
     end
     
     @board.render
     if @board.lost?
       puts "Bad luck, that."
-    else
+    elsif @board.won?
       puts "Way to go, champ!"
+    else
+      puts "Goodbye!"
     end
   end
   
+  def quit
+    print "Are you sure? > "
+    input = gets.chomp
+    return input[0] == 'y'
+  end
+  
   def get_input
-    puts "Please enter your choice as option,x coordinate, y coordinate"
-    print "e.g. \"r,x,y\" or \"f,x,y\" > "
+    puts "Please enter your choice as option, x coordinate, y coordinate"
+    puts "Enter q to quit or s to save"
+    print "e.g. \"r,x,y\" or \"f,x,y\" or \"q\" > "
     input = parse_input(gets.chomp)
     
     until valid? input
@@ -55,7 +72,11 @@ class Game
   end
   
   def valid? input
-    ['r','R','f','F'].include?( input.first ) && valid_pos?( input.last )
+    if ['r','R','f','F'].include?( input.first ) 
+      return valid_pos?( input.last )
+    else
+      return ['q','Q','s','S'].include?( input.first )
+    end
   end
   
   def valid_pos? pos
