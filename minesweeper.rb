@@ -1,6 +1,11 @@
 require_relative 'game'
 
 if __FILE__ == $PROGRAM_NAME
-  g = Game.new 9, 9
+  easy = {
+    num_bombs: 5,
+    width: 9,
+    length: 9
+  }
+  g = Game.new easy
   g.run
 end
